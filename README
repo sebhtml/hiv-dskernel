@@ -1,0 +1,43 @@
+This contains the source code for the web server available at
+
+	http://genome.ulaval.ca/hiv-dskernel
+
+for the paper
+
+	Sébastien Boisvert, Mario Marchand, François Laviolette and Jacques Corbeil
+	HIV-1 coreceptor usage prediction without multiple alignments: an application of string kernels
+	Retrovirology 2008, 5:110 doi:10.1186/1742-4690-5-110
+	Published: 4 December 2008
+
+A configuration file for lighttpd is provided in web-server.
+
+
+This distribution is based on 
+
+	http://www.retrovirology.com/content/supplementary/1742-4690-5-110-s1.zip
+
+
+-Sébastien Boisvert
+
+
+Software dependencies:
+
+ruby (1.8)
+bash
+R
+verification package for R 
+   (http://cran.stat.sfu.ca/web/packages/verification/index.html)
+g++
+gcc
+awk
+
+Results will be created in the 
+'tmp' directory upon execution 
+of 'make'.
+
+The DS Kernel implementation, in 
+the PermutationDS directory, is 
+under the General Public License 
+(version 3).
+
+

@@ -1,0 +1,84 @@
+#!/usr/bin/ruby
+
+if ARGV[0].nil?
+  puts "Usage: classifier dataset"
+  exit
+end
+
+puts "classifier starting"
+puts "run in O(|S|)"
+negative_knowledge={}
+positive_knowledge={}
+
+f=File.open ARGV[0]
+
+puts "Learning from examples"
+while example=f.gets
+  tokens=example.split " "
+  y=tokens.first.strip.to_i
+  x=tokens.last.strip
+  if negative_knowledge[x].nil?
+    negative_knowledge[x]=0
+  end
+  if positive_knowledge[x].nil?
+    positive_knowledge[x]=0
+  end
+  if y<0
+    negative_knowledge[x]+=1
+  else
+    positive_knowledge[x]+=1
+  end
+end
+f.rewind
+
+puts "Knowledge acquisition is done"
+misclassified_negative_examples=0
+correctly_classified_negative_examples=0
+misclassified_positive_examples=0
+correctly_classified_positive_examples=0
+puts "Evaluation examples"
+while example=f.gets
+  tokens=example.split " "
+  y=tokens.first.strip.to_i
+  x=tokens.last.strip
+  prediction=-1
+  if negative_knowledge[x]<positive_knowledge[x]
+    prediction=+1
+  end
+  if y<0
+    if y==prediction
+      correctly_classified_negative_examples+=1
+    else
+      misclassified_negative_examples+=1
+      puts x
+    end
+  else
+    if y==prediction
+      correctly_classified_positive_examples+=1
+    else
+      misclassified_positive_examples+=1
+    end
+  end
+end
+f.close
+puts "Done evaluating examples"
+
+puts "miss. neg. ex. #{misclassified_negative_examples}"
+puts "cor. neg. ex. #{correctly_classified_negative_examples}"
+puts "miss. pos. ex. #{misclassified_positive_examples}"
+puts "cor. neg. ex. #{correctly_classified_positive_examples}"
+
+tp=correctly_classified_positive_examples
+fp=misclassified_negative_examples
+tn=correctly_classified_negative_examples
+fn=misclassified_positive_examples
+
+puts "Accuracy: #{(tp+0.0+tn)/(tp+fp+tn+fn)}"
+puts "Specificity: #{(tn+0.0)/(tn+fp)}"
+puts "Sensitivity: #{(tp+0.0)/(tp+fn)}"
+
+pos=misclassified_negative_examples+correctly_classified_negative_examples
+neg=misclassified_positive_examples+correctly_classified_positive_examples
+acc=(correctly_classified_negative_examples+correctly_classified_positive_examples)/(pos+neg.to_f)*100
+puts sprintf("%2.2f",acc)
+puts (correctly_classified_negative_examples+correctly_classified_positive_examples)
